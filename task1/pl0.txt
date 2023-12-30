@@ -1,0 +1,6 @@
+PROGRAM add
+VAR x,y;
+BEGIN
+WHILE X>1 DO
+IF X>1 THEN
+END
