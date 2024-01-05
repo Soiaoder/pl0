@@ -1,4 +1,4 @@
-// Generated from D:/CompilationPrinciples/grammer/src/PL0.g4 by ANTLR 4.13.1
+// Generated from D:/bianyuan-final/pl0/src/PL0.g4 by ANTLR 4.13.1
 package Pl0;
 import org.antlr.v4.runtime.tree.ParseTreeVisitor;
 
@@ -101,11 +101,23 @@ public interface PL0Visitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitExpression(PL0Parser.ExpressionContext ctx);
 	/**
+	 * Visit a parse tree produced by {@link PL0Parser#plus}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitPlus(PL0Parser.PlusContext ctx);
+	/**
 	 * Visit a parse tree produced by {@link PL0Parser#term}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
 	T visitTerm(PL0Parser.TermContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link PL0Parser#multiply}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitMultiply(PL0Parser.MultiplyContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link PL0Parser#factor}.
 	 * @param ctx the parse tree

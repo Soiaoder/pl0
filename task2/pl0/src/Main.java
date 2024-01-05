@@ -16,8 +16,8 @@ import java.util.Comparator;
 
 public class Main {
     public static void main(String[] args) {
-        String filePath = "D://CompilationPrinciples//grammer//src//test.txt";  // 输入文件路径
-        String outputFilePath = "D://CompilationPrinciples//grammer//src//result.txt"; // 结果文件路径
+        String filePath = "D://bianyuan-final//pl0//src//test.txt";  // 输入文件路径
+        String outputFilePath = "D://bianyuan-final//pl0//src//result.txt"; // 结果文件路径
         try {
             String sourceCode = readFromFile(filePath);
             PL0Lexer lexer = new PL0Lexer(CharStreams.fromString(sourceCode));

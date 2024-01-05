@@ -1,4 +1,4 @@
-// Generated from D:/CompilationPrinciples/grammer/src/PL0.g4 by ANTLR 4.13.1
+// Generated from D:/bianyuan-final/pl0/src/PL0.g4 by ANTLR 4.13.1
 package Pl0;
 import org.antlr.v4.runtime.tree.AbstractParseTreeVisitor;
 
@@ -123,7 +123,21 @@ public class PL0BaseVisitor<T> extends AbstractParseTreeVisitor<T> implements PL
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
+	@Override public T visitPlus(PL0Parser.PlusContext ctx) { return visitChildren(ctx); }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation returns the result of calling
+	 * {@link #visitChildren} on {@code ctx}.</p>
+	 */
 	@Override public T visitTerm(PL0Parser.TermContext ctx) { return visitChildren(ctx); }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation returns the result of calling
+	 * {@link #visitChildren} on {@code ctx}.</p>
+	 */
+	@Override public T visitMultiply(PL0Parser.MultiplyContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
