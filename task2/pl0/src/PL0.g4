@@ -13,7 +13,7 @@ DO: 'DO';
 IF: 'IF';
 THEN: 'THEN';
 ELSE: 'ELSE';
-IDENTIFIER: [a-zA-Z] [a-zA-Z0-9]*;
+IDENTIFIER: [a-z] [a-z0-9]*;
 INTEGER: '0' | [1-9] [0-9]*;
 PLUS: '+';
 MINUS: '-';
@@ -79,7 +79,7 @@ multiply:MULTIPLY | DIVIDE;
 
 factor: IDENTIFIER | INTEGER | LPAREN expression RPAREN;
 
-emptyStatement: SEMICOLON?;
+emptyStatement: ;
 
 // 忽略空白字符
 WS: [ \t\r\n]+ -> skip;

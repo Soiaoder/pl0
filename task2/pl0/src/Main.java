@@ -36,6 +36,8 @@ public class Main {
             Collections.sort(codeResult, Comparator.comparingInt(IntermediateCode::getstart)); // 按照开始地址排序
             // 输出到文件
             writeToFile(outputFilePath, codeResult);
+            System.out.println("常量表: "+visitor.constTable);
+            System.out.println("变量表: "+visitor.varTable);
             // 结果打印到控制台
             for (IntermediateCode code : codeResult) {
                 System.out.println(code.toString());

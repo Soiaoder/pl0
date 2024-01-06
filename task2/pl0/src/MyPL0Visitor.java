@@ -1,15 +1,39 @@
 import Pl0.PL0BaseVisitor;
 import Pl0.PL0Parser;
+import org.antlr.v4.runtime.tree.TerminalNode;
 
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 
 public class MyPL0Visitor extends PL0BaseVisitor<String> {
     // 创建ArrayList来存储结果
     public ArrayList<IntermediateCode> codeResult = new ArrayList<>();
 
+    public Set<String> constTable = new HashSet<>();// 常亮定义
+    public Set<String> varTable = new HashSet<>(); // 变量定义
+
     private int labelCounter = 99; // 用于生成唯一的标签，地址
     private int number = 0; // 中间存储变量的序号
 
+
+    @Override
+    public String visitConstantDefinition(PL0Parser.ConstantDefinitionContext ctx) {
+        constTable.add(ctx.IDENTIFIER().getText());
+        visitChildren(ctx);
+        return null;
+    }
+
+    @Override
+    public String visitIdentifierList(PL0Parser.IdentifierListContext ctx) {
+        // 添加到符号表
+        for (TerminalNode var : ctx.IDENTIFIER()) {
+            varTable.add(var.getText());
+        }
+        // 处理变量声明
+        visitChildren(ctx);
+        return null;
+    }
 
     @Override
     public String visitWhileStatement(PL0Parser.WhileStatementContext ctx) {
@@ -21,11 +45,8 @@ public class MyPL0Visitor extends PL0BaseVisitor<String> {
         codeResult.add(new IntermediateCode(startLabel,"j"+operator, expression0, expression1, String.valueOf(startLabel+2)));
         labelCounter++; //
         int startLabel2 = labelCounter; // while的跳出循环地址
-
         visit(ctx.statement()); // 循环体的内容
-
-        labelCounter++;
-        // 跳回循环开始的地址，继续下一次循环
+        labelCounter++;// 跳回循环开始的地址，继续下一次循环
         codeResult.add(new IntermediateCode(labelCounter,"j", "-", "-", String.valueOf(startLabel)));
         // 跳出循环的指令
         codeResult.add(new IntermediateCode(startLabel2,"j", "-", "-", String.valueOf(labelCounter+1)));
@@ -56,6 +77,10 @@ public class MyPL0Visitor extends PL0BaseVisitor<String> {
         String expression0 = visitExpression(ctx.expression());  // 赋值的参数
         labelCounter++;
         codeResult.add(new IntermediateCode(labelCounter,":=", expression0, "-",identifier ));
+        if (!varTable.contains(identifier)&&!constTable.contains(identifier)) {
+            System.err.println(ctx.getText()+"赋值语句中变量 " + identifier + " 没有定义！");
+            return null;
+        }
         return null;
     }
 
@@ -102,6 +127,12 @@ public class MyPL0Visitor extends PL0BaseVisitor<String> {
                 return visitExpression(ctx.factor(0).expression());
             }
             else{    // 因子为标识符或者无符号整数
+                if( ctx.factor(0).IDENTIFIER()!=null){
+                    if (!varTable.contains(ctx.factor(0).IDENTIFIER().getText())&&!constTable.contains(ctx.factor(0).IDENTIFIER().getText())) {
+                        System.err.println(ctx.getText()+"因子中变量 " + ctx.factor(0).IDENTIFIER().getText() + " 没有定义！");
+                        return null;
+                    }
+                }
                 return ctx.factor(0).getChild(0).getText();
             }
         } else {
@@ -111,6 +142,12 @@ public class MyPL0Visitor extends PL0BaseVisitor<String> {
                 factor0=visitExpression(ctx.factor(0).expression());
             }
             else{    // 因子为标识符或者无符号整数
+                if( ctx.factor(0).IDENTIFIER()!=null){
+                    if (!varTable.contains(ctx.factor(0).IDENTIFIER().getText())&&!constTable.contains(ctx.factor(0).IDENTIFIER().getText())) {
+                        System.err.println(ctx.getText()+"因子中变量 " + ctx.factor(0).IDENTIFIER().getText() + " 没有定义！");
+                        return null;
+                    }
+                }
                 factor0=ctx.factor(0).getChild(0).getText();
             }
             for (int j = 1; j < ctx.factor().size(); j++) {
@@ -118,6 +155,12 @@ public class MyPL0Visitor extends PL0BaseVisitor<String> {
                     factor1=visitExpression(ctx.factor(j).expression());
                 }
                 else{    // 因子为标识符或者无符号整数
+                    if( ctx.factor(j).IDENTIFIER()!=null){
+                        if (!varTable.contains(ctx.factor(j).IDENTIFIER().getText())&&!constTable.contains(ctx.factor(j).IDENTIFIER().getText())) {
+                            System.err.println(ctx.getText()+"因子中变量 " + ctx.factor(j).IDENTIFIER().getText() + " 没有定义！");
+                            return null;
+                        }
+                    }
                     factor1=ctx.factor(j).getChild(0).getText();
                 }
                 String operator=ctx.getChild(2*j-1).getText();  // 因子间的操作符
